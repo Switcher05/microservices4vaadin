@@ -87,6 +87,7 @@ public class HomeView extends Panel implements View {
         bodyLayout.setComponentAlignment(greetings, Alignment.BOTTOM_CENTER);
 
         Button testButton = new Button("TestButton");
+        testButton.setId("testButton");
         bodyLayout.addComponent(testButton);
         bodyLayout.setComponentAlignment(testButton, Alignment.TOP_CENTER);
         testButton.addClickListener(e -> {

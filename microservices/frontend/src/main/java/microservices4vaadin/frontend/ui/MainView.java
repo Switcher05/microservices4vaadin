@@ -59,6 +59,7 @@ public class MainView extends VerticalLayout {
 
         Label logo = new Label("microservices4vaadin",
                 ContentMode.HTML);
+        logo.setId("siteTitle");
         logo.setSizeUndefined();
         headerLayout.addComponent(logo);
         headerLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
