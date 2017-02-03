@@ -4,103 +4,55 @@ import javax.annotation.PostConstruct;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Responsive;
-import com.vaadin.server.VaadinSession;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringView;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
+import com.vaadin.spring.annotation.UIScope;
+import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.ValoTheme;
 
-import microservices4vaadin.frontend.rest.resource.dto.UserServiceUserDTO;
-
+@UIScope
 @SpringView(name = HomeView.VIEW_NAME)
-public class HomeView extends Panel implements View {
+public class HomeView extends VerticalLayout implements View {
 
     private static final long serialVersionUID = -7001285092564194997L;
 
     public static final String VIEW_NAME = "";
 
-    private boolean initialized = false;
-
-    private VerticalLayout layout;
-
+    private CssLayout dashboardPanels = new CssLayout();
 
     @PostConstruct
     void init() {
-
-        layout = new VerticalLayout();
-        layout.setMargin(true);
-        layout.setSpacing(true);
-
-        setSizeFull();
+        setMargin(true);
+        setSpacing(true);
+        addComponent(new Label("This is a view scoped view"));
     }
 
     @Override
     public void enter(ViewChangeEvent event) {
-        if (!initialized) {
-            layout.addStyleName("dashboard-view");
+        // This view is constructed in the init() method()
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.addComponent(dashboardPanels);
+        addComponent(layout);
 
-            layout.addComponent(buildHeader());
-            layout.addComponent(buildBody());
+        buildAccountGraph();
+    }
 
-            setContent(layout);
-            Responsive.makeResponsive(layout);
-            initialized = true;
+    private void buildAccountGraph() {
+        class FeederThread extends Thread {
+            @Override
+            public void run() {
+                try {
+                    getUI().access(() -> dashboardPanels.addComponent(new Label("Hallo")));
+                    Thread.sleep(10000);
+                    getUI().access(() -> dashboardPanels.addComponent(new Label("Du")));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-    }
 
-    private Component buildHeader() {
-        HorizontalLayout header = new HorizontalLayout();
-        header.addStyleName("viewheader");
-        header.setSpacing(true);
-
-        Responsive.makeResponsive(header);
-
-        Label title = new Label("Welcome");
-        title.setSizeFull();
-        title.addStyleName(ValoTheme.LABEL_H1);
-        title.addStyleName(ValoTheme.LABEL_NO_MARGIN);
-        header.addComponent(title);
-        return header;
-    }
-
-    private Component buildBody() {
-        VerticalLayout bodyLayout = new VerticalLayout();
-        bodyLayout.setSizeFull();
-
-        UserServiceUserDTO user = getCurrentUser();
-
-        Label greetings = new Label(new Label("Hello <b>" + user.getFirstName() + " " + user.getLastName()
-        + "</b>, now you are in the Vaadin UI."));
-        greetings.setContentMode(ContentMode.HTML);
-        greetings.setWidth(null);
-
-        bodyLayout.addComponent(greetings);
-        bodyLayout.setComponentAlignment(greetings, Alignment.BOTTOM_CENTER);
-
-        Button testButton = new Button("TestButton");
-        bodyLayout.addComponent(testButton);
-        bodyLayout.setComponentAlignment(testButton, Alignment.TOP_CENTER);
-        testButton.addClickListener(e -> {
-            Window window = new Window("TestWindow");
-            UI.getCurrent().addWindow(window);
-            window.focus();
-            window.center();
-        });
-        return bodyLayout;
-    }
-
-    public UserServiceUserDTO getCurrentUser() {
-        return (UserServiceUserDTO) VaadinSession.getCurrent().getAttribute(
-                UserServiceUserDTO.class.getName());
+        new FeederThread().start();
     }
 
 }

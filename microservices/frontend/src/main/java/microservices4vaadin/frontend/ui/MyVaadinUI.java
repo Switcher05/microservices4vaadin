@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.BootstrapFragmentResponse;
 import com.vaadin.server.BootstrapListener;
@@ -32,6 +33,7 @@ import microservices4vaadin.frontend.ui.event.MyEvent.CloseOpenWindowsEvent;
 
 @Theme("microservices4vaadin")
 @SpringUI
+@Push
 public class MyVaadinUI extends UI {
 
     private static final long serialVersionUID = -8889596293072651801L;
