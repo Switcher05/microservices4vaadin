@@ -17,7 +17,7 @@ ext {
 
 dependencyManagement {
     imports {
-        mavenBom 'org.springframework.data:spring-data-releasetrain:Hopper-SR1'
+        mavenBom 'org.springframework.data:spring-data-releasetrain:Hopper-SR7'
     }
 }
 

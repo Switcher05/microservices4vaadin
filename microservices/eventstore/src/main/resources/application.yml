@@ -17,6 +17,11 @@ spring:
   profiles:
     active: ${profile:default}
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.host:localhost}:${eureka.port:8761}/eureka/ 
+
 logging:
   level:
     microservices4vaadin: INFO
@@ -31,9 +36,3 @@ spring:
   data:
     mongodb:
       uri: mongodb://mongodb:27017/users
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery:8761/eureka/
-

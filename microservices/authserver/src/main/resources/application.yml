@@ -11,7 +11,10 @@ eureka:
     nonSecurePortEnabled: false
     securePortEnabled: true
     securePort: 7777
-
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.host:localhost}:${eureka.port:8761}/eureka/ 
+      
 email:
   username: USERNAME
   password: PASSWORD
@@ -80,9 +83,3 @@ spring:
     host: redis
   datasource:
     url: jdbc:mysql://mysql/microservice4vaadin_authserverdb?useSSL=false&zeroDateTimeBehavior=convertToNull  
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery:8761/eureka/
-
