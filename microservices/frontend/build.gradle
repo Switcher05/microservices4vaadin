@@ -29,7 +29,6 @@ dependencyManagement {
 
 dependencies {
     compile("com.vaadin:vaadin-spring-boot-starter:${vaadinSpringBootVersion}")
-    compile("com.vaadin:vaadin-push:${vaadinVersion}")
 
     compile("org.springframework.boot:spring-boot-starter-hateoas")
 
